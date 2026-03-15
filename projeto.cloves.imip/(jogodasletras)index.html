@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aventura das Letras! 🎈</title>
+    <style>
+        /* CSS - O Visual Colorido */
+        body {
+            background-color: #FFDE59; /* Amarelo vivo */
+            font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #game-container {
+            background: white;
+            padding: 30px;
+            border-radius: 50px;
+            border: 10px solid #FF5757; /* Borda vermelha */
+            text-align: center;
+            box-shadow: 0 15px 0 #d32f2f;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #5271FF;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px #FFDE59;
+            margin-bottom: 10px;
+        }
+
+        #display-emoji {
+            font-size: 100px;
+            margin: 20px 0;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #7ED957; /* Verde */
+            border: none;
+            border-radius: 20px;
+            color: white;
+            font-size: 2rem;
+            padding: 15px 30px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 8px 0 #45a049;
+        }
+
+        button:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #45a049;
+        }
+
+        button:hover {
+            background-color: #FF914D; /* Laranja ao passar o mouse */
+        }
+
+        #message {
+            height: 30px;
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <h1>Qual é a letra?</h1>
+    <div id="display-emoji">🍎</div>
+    
+    <div class="options" id="buttons">
+        </div>
+
+    <p id="message"></p>
+</div>
+
+<script>
+    /* JavaScript - A Lógica do Jogo */
+    const challenges = [
+        { emoji: '🍎', letter: 'A', options: ['A', 'B', 'C'] },
+        { emoji: '🐶', letter: 'C', options: ['P', 'C', 'G'] }, // C de Cão
+        { emoji: '🐘', letter: 'E', options: ['I', 'O', 'E'] },
+        { emoji: '🐈', letter: 'G', options: ['G', 'L', 'M'] }, // G de Gato
+        { emoji: '🍦', letter: 'S', options: ['S', 'V', 'R'] }  // S de Sorvete
+    ];
+
+    let currentLevel = 0;
+
+    function loadLevel() {
+        const stage = challenges[currentLevel];
+        document.getElementById('display-emoji').innerText = stage.emoji;
+        const btnContainer = document.getElementById('buttons');
+        btnContainer.innerHTML = '';
+        document.getElementById('message').innerText = "Escolha a letra inicial!";
+        document.getElementById('message').style.color = "black";
+
+        stage.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(opt);
+            btnContainer.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selected) {
+        const correct = challenges[currentLevel].letter;
+        const msg = document.getElementById('message');
+
+        if (selected === correct) {
+            msg.innerText = "PARABÉNS! Você acertou! 🌟";
+            msg.style.color = "#7ED957";
+            
+            setTimeout(() => {
+                currentLevel++;
+                if (currentLevel < challenges.length) {
+                    loadLevel();
+                } else {
+                    document.getElementById('game-container').innerHTML = "<h1>VOCÊ VENCEU! 🏆</h1><button onclick='location.reload()'>Jogar de Novo</button>";
+                }
+            }, 1500);
+        } else {
+            msg.innerText = "Tente de novo! Você consegue! 💪";
+            msg.style.color = "#FF5757";
+        }
+    }
+
+    // Iniciar o jogo
+    loadLevel();
+</script>
+
+</body>
+</html>
